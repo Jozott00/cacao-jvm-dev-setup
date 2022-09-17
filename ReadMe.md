@@ -29,6 +29,19 @@ Tools used in this guide:
   * I specified the workspace path to `/code/cacao` so you should be located there
   * Validate the environment by invoking `make check` in the `/code/build` directory
 
+# Some helpful commands
+
+#### Check environment
+```
+cd /code/build 
+make check
+```
+#### Build doxygen documentation
+This builds the code documentation, which is nice to have since the cacaovm.org documentation page isn't reachable anymore.
+```
+mkdir /code/docs && cd /code/docs
+doxygen /code/build/doc/doxygen/Doxyfile
+```
 # Differences to the original guide
 
 * The Docker container requires `jdk7`, which the original Dockerfile installed via `apt` from `ppa/openjdk`. For some time now, `jdk7` is no longer available via apt, so we install it manually.

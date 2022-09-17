@@ -14,7 +14,8 @@ RUN apt update \
         libiberty-dev \
         fastjar \
         zlib1g-dev \
-        software-properties-common
+        software-properties-common \
+        doxygen
 
 RUN apt update \
     && apt-get install -y software-properties-common \
