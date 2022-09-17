@@ -5,3 +5,5 @@
 !.gitignore
 !dockerfile
 !ReadMe.md
+!.devcontainer/
+!.devcontainer/devcontainer.json

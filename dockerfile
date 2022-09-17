@@ -1,7 +1,8 @@
-FROM ubuntu:16.04
+FROM --platform=linux/amd64 ubuntu:16.04
 
-RUN  apt-get install -y \
-        mercurial \
+RUN apt update \ 
+    && apt-get install -y \
+        git \
         wget \
         unzip \
         libtool \
@@ -19,13 +20,25 @@ RUN apt update \
     && apt-get install -y software-properties-common \
     && add-apt-repository ppa:ubuntu-toolchain-r/test \
     && apt update \
-    && apt install gcc-9 g++-9 -y \
-    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9 \\
-    && update-alternatives --config gcc
+    && apt install gcc-9 g++-9 -y
 
-RUN add-apt-repository ppa:openjdk-r/ppa -y \
-    && apt-get update \
-    && apt-get install -y openjdk-7-jdk
+# Installing openjdk7
+# Note that you have to download the jdk7 tar.gz from oracle archive and placed it in the same folder as the Dockerfile
+COPY jdk-7u80-linux-x64.tar.gz jdk-7u80-linux-x64.tar.gz
+RUN tar -xzf jdk-7u80-linux-x64.tar.gz && \
+    mkdir /usr/java && \
+    mv jdk1.7.0_80 /usr/java && \
+    ln -s /usr/java/jdk1.7.0_80 /usr/java/jdk7 && \
+    ln -s /usr/java/jdk7 /usr/java/latest && \
+    ln -s /usr/java/latest /usr/java/default && \
+    ln -s /usr/java/default/bin/java /usr/bin/java && \
+    ln -s /usr/java/default/bin/javac /usr/bin/javac && \
+    ln -s /usr/java/default/bin/javah /usr/bin/javah && \
+    ln -s /usr/java/default/bin/javadoc /usr/bin/javadoc && \
+    ln -s /usr/java/default/bin/javaws /usr/bin/javaws
+
+ENV JAVA_HOME=/usr/java/default
+ENV PATH=$JAVA_HOME/bin:$PATH
 
 RUN mkdir -p /code/tools
 WORKDIR /code
@@ -52,7 +65,8 @@ RUN cd tools \
     && wget https://sourceforge.net/projects/boost/files/boost/1.61.0/boost_1_61_0.tar.gz \
     && tar xzf boost_1_61_0.tar.gz
 
-RUN hg clone https://bitbucket.org/tobixdev/cacao-staging/
+# Change to your developement repository
+RUN git clone https://bitbucket.org/cacaovm/cacao.git
 
 RUN cd tools/classpath-0.99 \
     && sh autogen.sh \
@@ -60,10 +74,10 @@ RUN cd tools/classpath-0.99 \
     && make \
     && make install
 
-RUN cd cacao-staging && sh autogen.sh
+RUN cd cacao && sh autogen.sh
 
 RUN mkdir build \
     && cd build \
-    && ../cacao-staging/configure --enable-debug --enable-compiler2 --enable-replacement --enable-logging --with-java-runtime-library=gnuclasspath --with-java-runtime-library-prefix=/usr/local/classpath --with-junit-jar=/usr/share/java/junit4.jar:/usr/share/java/hamcrest.jar
+    && ../cacao/configure --enable-debug --enable-compiler2 --enable-replacement --enable-logging --with-java-runtime-library=gnuclasspath --with-java-runtime-library-prefix=/usr/local/classpath --with-junit-jar=/usr/share/java/junit4.jar:/usr/share/java/hamcrest.jar
 
 ENV CPATH=/code/tools/boost_1_61_0/
