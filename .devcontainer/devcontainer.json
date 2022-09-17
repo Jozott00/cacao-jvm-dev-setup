@@ -3,5 +3,10 @@
 	"context": "..",
   // This sets the workspace folder to /code/cacao, so you don't have to 
   // open a new vscode window on startup at this location.
-  "workspaceFolder": "/code/cacao"
+"workspaceFolder": "/code/cacao",
+"dockerFile": "../Dockerfile",
+"runArgs": ["--name=cacao-dev-container"],
+"customizations": {
+	"vscode": {}
+}
 }

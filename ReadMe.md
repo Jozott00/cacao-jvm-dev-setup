@@ -7,10 +7,10 @@ Also thanks to [Tobias Schwarzinger](https://github.com/tobixdev) who wrote the 
 
 This guide summarizes the setup of a [cacaojvm](http://www.cacaojvm.org/) dev container using docker.
 
-I use an MacOS on M1 Apple Silicon but in theory a similar approach should work on Linux or Windows based systems.
+It is tested on x86_64 Linux and M1 Apple Silicon. In theory it should walk for x86* Windows machines as well.
 
 Tools used in this guide:
-* OS System (MacOS in my case)
+* OS System
 * docker deamon
 * Visual Studio Code
     * [Remote - Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
