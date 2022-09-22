@@ -31,7 +31,8 @@ Tools used in this guide:
 # Build the executable
 
 Go to `/code/build` and run `make`. This will take a while and creates the executable `/code/build/cacao/cacao` and the respective `libjvm.so` `/code/build/cacao/.libs/libjvm.so`. 
-To speed things up, you can execute `make` with `make -j 12` which uses 12 threads to compile the project. In case the build process crashes, rerun the `make -j ..` command with less threads.
+To speed things up, you can execute `make` with `make -j 12` which uses 12 threads to compile the project. Note that you should increase the allowed docker resoureces in the docker preferences (RAM, Cores). In case the build process crashes, rerun the `make -j ..` command with less threads.
+
 
 # Run a java `Hello World`
 
