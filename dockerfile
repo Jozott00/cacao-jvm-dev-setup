@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 ubuntu:16.04
+FROM --platform=linux/amd64 ubuntu:18.04
 
 RUN apt update \ 
     && apt-get install -y \
@@ -15,70 +15,60 @@ RUN apt update \
         fastjar \
         zlib1g-dev \
         software-properties-common \
+        apt-transport-https \
+        locales \
+        vim \
         doxygen
 
-RUN apt update \
-    && apt-get install -y software-properties-common \
-    && add-apt-repository ppa:ubuntu-toolchain-r/test \
-    && apt update \
-    && apt install gcc-9 g++-9 -y
 
-# Installing openjdk7
-# Note that you have to download the jdk7 tar.gz from oracle archive and placed it in the same folder as the Dockerfile
-COPY jdk-7u80-linux-x64.tar.gz jdk-7u80-linux-x64.tar.gz
-RUN tar -xzf jdk-7u80-linux-x64.tar.gz && \
-    mkdir /usr/java && \
-    mv jdk1.7.0_80 /usr/java && \
-    ln -s /usr/java/jdk1.7.0_80 /usr/java/jdk7 && \
-    ln -s /usr/java/jdk7 /usr/java/latest && \
-    ln -s /usr/java/latest /usr/java/default && \
-    ln -s /usr/java/default/bin/java /usr/bin/java && \
-    ln -s /usr/java/default/bin/javac /usr/bin/javac && \
-    ln -s /usr/java/default/bin/javah /usr/bin/javah && \
-    ln -s /usr/java/default/bin/javadoc /usr/bin/javadoc && \
-    ln -s /usr/java/default/bin/javaws /usr/bin/javaws
+# gcc 9
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
+    && apt-get update \
+    && apt-get -y install gcc-9 g++-9 \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9 \
+    && update-alternatives --config gcc
 
-ENV JAVA_HOME=/usr/java/default
+# zulu7-jdk
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+ARG ZULU_REPO_VER=1.0.0-2
+RUN locale-gen en_US.UTF-8 \
+    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0x219BD9C9 \
+    && wget https://cdn.azul.com/zulu/bin/zulu-repo_${ZULU_REPO_VER}_all.deb \
+    && apt-get -y install ./zulu-repo_${ZULU_REPO_VER}_all.deb \
+    && apt-get update \
+    && apt-get -y install zulu7-jdk zulu7-src
+ENV JAVA_HOME=/usr/lib/jvm/zulu7-ca-amd64
+
 ENV PATH=$JAVA_HOME/bin:$PATH
 
-RUN mkdir -p /code/tools
-WORKDIR /code
 
-RUN cd tools \
-    && wget https://repo1.maven.org/maven2/junit/junit/4.12/junit-4.12.jar -O junit-4.12.jar \
-    && mkdir -p /usr/share/java \
-    && cp junit-4.12.jar /usr/share/java/junit4.jar
+WORKDIR /usr/share/java
 
-RUN cd tools \
-    && wget https://repo1.maven.org/maven2/org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3.jar -O hamcrest-1.3.jar \
-    && cp hamcrest-1.3.jar /usr/share/java/hamcrest.jar
+RUN wget -O junit4.jar https://repo1.maven.org/maven2/junit/junit/4.12/junit-4.12.jar
+RUN wget -O hamcrest.jar https://repo1.maven.org/maven2/org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3.jar
+RUN wget http://ufpr.dl.sourceforge.net/project/jasmin/jasmin/jasmin-2.4/jasmin-2.4.zip \
+    && unzip jasmin-2.4.zip jasmin-2.4/jasmin.jar \
+    && mv jasmin-2.4/jasmin.jar jasmin-sable.jar \
+    && rm -rf jasmin-2.4 jasmin-2.4.zip
 
-RUN cd tools \
-    && wget http://ufpr.dl.sourceforge.net/project/jasmin/jasmin/jasmin-2.4/jasmin-2.4.zip \
-    && unzip jasmin-2.4.zip \
-    && cp jasmin-2.4/jasmin.jar /usr/share/java/jasmin-sable.jar
+WORKDIR /dependencies
 
-RUN cd tools \
-    && wget ftp://ftp.gnu.org/gnu/classpath/classpath-0.99.tar.gz \
-    && tar xzf classpath-0.99.tar.gz
+RUN wget -O - https://sourceforge.net/projects/boost/files/boost/1.61.0/boost_1_61_0.tar.gz | tar -xz
+ENV CPATH=/dependencies/boost_1_61_0/
 
-RUN cd tools \
-    && wget https://sourceforge.net/projects/boost/files/boost/1.61.0/boost_1_61_0.tar.gz \
-    && tar xzf boost_1_61_0.tar.gz
-
-# Change to your developement repository
-RUN git clone https://bitbucket.org/cacaovm/cacao.git
-
-RUN cd tools/classpath-0.99 \
+RUN wget -O - ftp://ftp.gnu.org/gnu/classpath/classpath-0.99.tar.gz | tar -xz
+RUN cd classpath-0.99 \
     && sh autogen.sh \
-    && ./configure --disable-plugin --disable-gtk-peer --disable-gconf-peer --disable-gjdoc \
-    && make \
+    && ./configure --disable-plugin --disable-gtk-peer --disable-gconf-peer --disable-gjdoc CFLAGS="-Wno-error=stringop-truncation" \
     && make install
 
-RUN cd cacao && sh autogen.sh
+RUN git clone https://github.com/openjdk/jdk7.git
 
-RUN mkdir build \
-    && cd build \
-    && ../cacao/configure --enable-debug --enable-compiler2 --enable-replacement --enable-logging --with-java-runtime-library=gnuclasspath --with-java-runtime-library-prefix=/usr/local/classpath --with-junit-jar=/usr/share/java/junit4.jar:/usr/share/java/hamcrest.jar
+ARG CACAO_GIT_REPO=https://bitbucket.org/cacaovm/cacao.git
+ENV CACAO_REPO=${CACAO_GIT_REPO}
 
-ENV CPATH=/code/tools/boost_1_61_0/
+ENV DOCK_BUILD_DIR=/code/build
+ENV DOCK_SRC_DIR=/code/cacao
+ENV DOCK_TOOL_DIR=/tools
+
+RUN mkdir ${DOCK_TOOL_DIR}

@@ -7,3 +7,6 @@
 !ReadMe.md
 !.devcontainer/
 !.devcontainer/devcontainer.json
+!tools
+!tools/*
+!code

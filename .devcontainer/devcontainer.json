@@ -1,12 +1,24 @@
 {
 	"name": "CACAO-JVM Dev Setup",
+
+  "build": {
+    "args": {
+      // Change this, if you want to clone from a different cacao repository
+      "CACAO_GIT_REPO": "https://ea.complang.tuwien.ac.at/UniJIT/cacao.git"
+    }
+  },
+
 	"context": "..",
   // This sets the workspace folder to /code/cacao, so you don't have to 
   // open a new vscode window on startup at this location.
-"workspaceFolder": "/code/cacao",
-"dockerFile": "../Dockerfile",
-"runArgs": ["--name=cacao-dev-container"],
-"customizations": {
-	"vscode": {}
-}
+  "workspaceFolder": "/code",
+  "dockerFile": "../Dockerfile",
+  "mounts": [
+    "source=${localWorkspaceFolder}/tools,target=/tools,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/code,target=/code,type=bind,consistency=cached"
+  ],
+  "runArgs": ["--name=cacao-dev"],
+  "customizations": {
+    "vscode": {}
+  }
 }
