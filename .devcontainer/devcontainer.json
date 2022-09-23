@@ -12,7 +12,7 @@
   // This sets the workspace folder to /code/cacao, so you don't have to 
   // open a new vscode window on startup at this location.
   "workspaceFolder": "/code",
-  "dockerFile": "../Dockerfile",
+  "dockerFile": "../dockerfile",
   "mounts": [
     "source=${localWorkspaceFolder}/tools,target=/tools,type=bind,consistency=cached",
     "source=${localWorkspaceFolder}/code,target=/code,type=bind,consistency=cached"
