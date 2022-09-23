@@ -18,6 +18,7 @@ RUN apt update \
         apt-transport-https \
         locales \
         vim \
+        gdb \
         doxygen
 
 
