@@ -4,3 +4,5 @@
 !configure_cacao.sh
 !gettingStarted.sh
 !run_cacao.sh
+!cacao_autogen.sh
+!ag_conf_mak.sh
