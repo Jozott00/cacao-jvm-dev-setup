@@ -3,6 +3,9 @@
     "*.rmd": "markdown",
     "typeindex": "cpp",
     "typeinfo": "cpp",
-    "*.inc": "cpp"
-  }
+    "*.inc": "cpp",
+    "any": "cpp",
+    "filesystem": "cpp"
+  },
+  "C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, AlignConsecutiveDeclarations: true, BreakBeforeBraces: Stroustrup }",
 }
