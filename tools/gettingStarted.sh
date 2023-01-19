@@ -6,7 +6,7 @@ git -C "$DOCK_SRC_DIR" pull || git clone $CACAO_REPO "$DOCK_SRC_DIR"
 
 # start cacaos autogen
 echo "\n---\nStart autogen...\n"
-$DOCK_TOOL_DIR/cacao_autogen.sh
+sh $DOCK_TOOL_DIR/cacao_autogen.sh
 
 echo "\n---\nConfigure CACAO project...\n"
 mkdir /code/build
