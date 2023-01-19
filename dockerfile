@@ -1,5 +1,6 @@
-FROM --platform=linux/amd64 ubuntu:18.04
+FROM --platform=linux/amd64 ubuntu:23.04
 
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update \ 
     && apt-get install -y \
         git \

@@ -15,7 +15,8 @@
   "dockerFile": "../dockerfile",
   "mounts": [
     "source=${localWorkspaceFolder}/tools,target=/tools,type=bind,consistency=cached",
-    "source=${localWorkspaceFolder}/code,target=/code,type=bind,consistency=cached"
+    "source=${localWorkspaceFolder}/code,target=/code,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.ssh/,target=/root/.ssh,type=bind,consistency=cached",
   ],
   "runArgs": ["--name=cacao-dev"],
   "customizations": {
