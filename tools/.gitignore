@@ -6,3 +6,4 @@
 !run_cacao.sh
 !cacao_autogen.sh
 !ag_conf_mak.sh
+!unijit_installs.sh

@@ -5,7 +5,11 @@
     "typeinfo": "cpp",
     "*.inc": "cpp",
     "any": "cpp",
-    "filesystem": "cpp"
+    "filesystem": "cpp",
+    "algorithm": "cpp",
+    "random": "cpp",
+    "valarray": "cpp"
   },
   "C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, AlignConsecutiveDeclarations: true, BreakBeforeBraces: Stroustrup }",
+  "editor.formatOnSave": false
 }

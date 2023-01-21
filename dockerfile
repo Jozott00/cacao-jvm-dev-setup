@@ -55,8 +55,9 @@ RUN wget http://ufpr.dl.sourceforge.net/project/jasmin/jasmin/jasmin-2.4/jasmin-
 
 WORKDIR /dependencies
 
-RUN wget -O - https://sourceforge.net/projects/boost/files/boost/1.61.0/boost_1_61_0.tar.gz | tar -xz
-ENV CPATH=/dependencies/boost_1_61_0/
+RUN wget -O - https://sourceforge.net/projects/boost/files/boost/1.81.0/boost_1_81_0.tar.gz | tar -xz
+ENV CPATH=/dependencies/boost_1_81_0/
+RUN cd boost_1_81_0/ && ./bootstrap.sh && ./b2 install
 
 RUN wget -O - ftp://ftp.gnu.org/gnu/classpath/classpath-0.99.tar.gz | tar -xz
 RUN cd classpath-0.99 \
@@ -65,6 +66,9 @@ RUN cd classpath-0.99 \
     && make install
 
 RUN git clone https://github.com/openjdk/jdk7.git
+
+# By default apt is typed with /usr/lib/jvm/zulu7-ca-amd64/bin/apt
+RUN alias apt='/usr/bin/apt'
 
 ARG CACAO_GIT_REPO=https://bitbucket.org/cacaovm/cacao.git
 ENV CACAO_REPO=${CACAO_GIT_REPO}
