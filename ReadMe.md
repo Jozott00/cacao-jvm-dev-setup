@@ -3,6 +3,9 @@
 Thanks to [dinfuehr](https://gist.github.com/dinfuehr) for providing the original [cacao-jvm-dockerfile](https://gist.github.com/dinfuehr/ab83ad825cd24be0e816588d0465a7fb).
 Also thanks to [Tobias Schwarzinger](https://github.com/tobixdev) and [Robert Obkircher](https://github.com/RobertObkircher) who extended the Dockerfile.
 
+## IMPORTANT
+While the master branch has a more general configuration, the unijit branch is more stable and updated.
+
 # What is this?
 
 This guide summarizes the setup of a [cacaojvm](http://www.cacaojvm.org/) dev container using docker.
