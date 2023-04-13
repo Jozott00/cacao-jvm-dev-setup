@@ -1,7 +1,7 @@
 FROM --platform=linux/amd64 ubuntu:23.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt update \ 
+RUN apt update \
     && apt-get install -y \
         git \
         wget \
@@ -67,8 +67,11 @@ RUN cd classpath-0.99 \
 
 RUN git clone https://github.com/openjdk/jdk7.git
 
-# By default apt is typed with /usr/lib/jvm/zulu7-ca-amd64/bin/apt
-RUN alias apt='/usr/bin/apt'
+# Necassery for project configuration
+RUN apt-get install -y pkg-config autoconf-archive
+
+# configure aliases (like apt and unijit)
+RUN ln -s /tools/.bash_aliases /root/.bash_aliases
 
 ARG CACAO_GIT_REPO=https://bitbucket.org/cacaovm/cacao.git
 ENV CACAO_REPO=${CACAO_GIT_REPO}

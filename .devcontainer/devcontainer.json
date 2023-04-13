@@ -1,14 +1,12 @@
 {
-	"name": "CACAO-JVM Dev Setup",
-
+  "name": "CACAO-JVM Dev Setup",
   "build": {
     "args": {
       // Change this, if you want to clone from a different cacao repository
       "CACAO_GIT_REPO": "https://ea.complang.tuwien.ac.at/UniJIT/cacao.git"
     }
   },
-
-	"context": "..",
+  "context": "..",
   // This sets the workspace folder to /code/cacao, so you don't have to 
   // open a new vscode window on startup at this location.
   "workspaceFolder": "/code",
@@ -18,10 +16,16 @@
     "source=${localWorkspaceFolder}/code,target=/code,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.ssh/,target=/root/.ssh,type=bind,consistency=cached",
   ],
-  "runArgs": ["--name=cacao-dev"],
+  "runArgs": [
+    "--name=cacao-dev"
+  ],
   "customizations": {
     "vscode": {
-      "extensions": ["ms-vscode.cpptools", "ms-vscode.cpptools-extension-pack"]
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ethansk.restore-terminals"
+      ]
     }
   }
 }

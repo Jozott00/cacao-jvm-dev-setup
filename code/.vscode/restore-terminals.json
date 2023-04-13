@@ -1,0 +1,35 @@
+{
+  "artificialDelayMilliseconds": 700,
+  "keepExistingTerminalsOpen": false,
+  "runOnStartup": false,
+  "terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "regression tests",
+          "commands": ["cd /code/build/tests/regression"]
+        },
+        {
+          "name": "custom tests",
+          "commands": ["cd /code/tests"]
+        },
+        {
+          "name": "cacao-src",
+          "commands": ["cd /code/cacao/src/vm/jit/uniJIT/"]
+        },
+        {
+          "name": "build-cacao",
+          "commands": ["cd /code/build"]
+        }
+      ]
+    }, 
+    {
+      "splitTerminals": [
+        {
+          "name": "build jtl",
+          "commands": ["cd /code/jtl/build"]
+        }
+      ]
+    }
+  ]
+}
